@@ -61,6 +61,30 @@
 
 <body>
     <?php
+        include("../../Components/menu/menu.html");
+        include("../../dados/conexao/conexao.php"); 
+
+        // Consulta autores
+        $sql = "SELECT Nome, Email, DataNascimento, Biografia FROM autor";
+        $result = $conn->query($sql);
+
+        echo "<h1>📚 Lista de Autores</h1>";
+
+        if ($result && $result->num_rows > 0) {
+            echo "<table>";
+            echo "<tr><th>Nome</th><th>Email</th><th>Data de Nascimento</th><th>Biografia</th></tr>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row["Nome"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["Email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["DataNascimento"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["Biografia"]) . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "<p>Nenhum autor cadastrado ainda.</p>";
+        }
     include("../../dados/conexao/conexao.php");
 
 
