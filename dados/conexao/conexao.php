@@ -2,7 +2,7 @@
     $database = "universodaspalavras";
     $serve = "localhost";
     $user = "root";
-    $pass = "Aluno123qwer#";
+    $pass = "2208";
 
     $mensagen = "";
     session_start();
