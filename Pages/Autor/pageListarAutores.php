@@ -92,8 +92,8 @@
     <h1>📚 Lista de Autores</h1>
 
     <?php if ($result && $result->num_rows > 0): ?>
-        <table>
-            <tr>
+        <table class="w3-table-all w3-hoverable">
+            <tr class="w3-green">
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
