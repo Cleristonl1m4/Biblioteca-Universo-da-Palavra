@@ -2,10 +2,9 @@
     $database = "universodaspalavras";
     $serve = "localhost";
     $user = "root";
-    $pass = "2208";
+    $pass = "Aluno123qwer#";
 
     $mensagen = "";
-    session_start();
     $conn = new mysqli($serve,$user,$pass,$database );
 
     if ($conn ->connect_error){
