@@ -34,7 +34,6 @@
 </head>
 <body>
     <?php
-        include("../../Components/menu/menu.html");
         include("../../dados/conexao/conexao.php"); 
 
         // Consulta autores

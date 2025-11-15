@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
-    <title>Document</title>
+    <title>Autor</title>
 
 </head>
 
@@ -164,7 +164,7 @@
             $insert->bind_param("ssss", $Nome, $Email, $DataNascimento, $Biografia);
 
             if ($insert->execute()) {
-                header("Location: /Biblioteca-Universo-da-Palavra/Pages/Autor/pageListarAutores.php?sucesso=1");
+                echo '<div style="background: green;"">"Dados inseridos com Sucesso</div>';
                 exit();
             } else {
                 echo "Erro ao inserir registros: " . $conn->error;
@@ -183,7 +183,7 @@
 
     <h1>Registro Autor</h1>
 
-    <form action "/Biblioteca-Universo-da-Palavra/Pages/Autor/pageAutor.php" style="border:1px solid #ccc"
+    <form action "/Universo-da-Palavra/Pages/Autor/pageAutor.php" style="border:1px solid #ccc"
         method="POST">
 
 
@@ -215,6 +215,7 @@
             </div>
         </div>
     </form>
+    <?php include("pageListarAutores.php") ?>
 </body>
 
 </html>
