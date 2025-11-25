@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="w3-container">
+<body>
 
 <?php
 include("../../dados/conexao/conexao.php");
 include("../../Components/menu/menu.html");
 
-// Excluir livro se receber ID
+
 if (isset($_GET['excluir'])) {
     $id = intval($_GET['excluir']);
     $sqlDel = "DELETE FROM livros WHERE id = ?";
@@ -27,14 +27,12 @@ if (isset($_GET['excluir'])) {
     $stmt->close();
 }
 
-// Cadastrar livro
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $Titulo = $_POST["Titulo"] ?? null;
     $Autor = $_POST["Autor"] ?? null;
     $AnoPublicacao = $_POST["AnoPublicacao"] ?? null;
     $Editora = $_POST["Editora"] ?? null;
 
-    // Upload da capa
     $Capa = null;
     if (!empty($_FILES["Capa"]["name"])) {
         $nomeArquivo = basename($_FILES["Capa"]["name"]);
