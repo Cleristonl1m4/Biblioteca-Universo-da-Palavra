@@ -9,7 +9,7 @@
     <title>Cadastro de Clientes</title>
 </head>
 <styles>
-    
+
 </styles>
 
 <body>
@@ -33,56 +33,68 @@
         $insert->bind_param("sssssssss", $nome, $cpf, $telefone, $cep, $estado, $cidade, $endereco, $bairro, $email);
 
         if ($insert->execute()) {
-            echo '<div style="background: green;"">"Dados inseridos com Sucesso</div>';
+            echo '<div class="w3-panel w3-green">
+            <h3>Concluido!</h3>
+            <p>Dados inseridos com sucesso</p>
+            </div>'; 
         } else {
-            echo "Erro ao inserir registros:" . $conn->$error;
+            echo '<div class="w3-panel w3-red">
+            <h3>Falha!</h3>
+            <p>Erro ao inserir dados</p> 
+            </div>';
         }
 
         $insert->close();
     }
     ?>
-    <form id="formaCliente" class="w3-container w3-card-4 w3-light-grey w3-margin" action="pageClientesCadastro.php" method="post">
-        <h2 class="w3-center">Cadrastro de Clientes</h2>
-        <div class="container w3-margin-left w3-margin-right w3-margin-bottom">
-
-            <label for="nome">Nome:</label><br>
-            <input class="w3-input" type="text" id="nome" name="nome" placeholder="Nome" required><br>
-
-
-            <label for="cpf">CPF:</label><br>
-            <input class="w3-input" type="text" id="cpf" name="cpf" placeholder="CPF" required><br>
-
-
-            <label for="telefone">Telefone:</label><br>
-            <input class="w3-input" type="text" id="telefone" name="telefone" placeholder="Telefone" required><br>
-
-
-            <label for="cep">Cep:</label><br>
-            <input class="w3-input" type="text" id="cap" name="cep" placeholder="CEP" required><br>
-
-
-            <label for="estado">Estado:</label><br>
-            <input class="w3-input" type="text" id="estado" name="estado" placeholder="Estado" required><br>
-
-
-            <label for="cidade">Cidade:</label><br>
-            <input class="w3-input" type="text" id="cidade" name="cidade" placeholder="Cidade" required><br>
-
-
-            <label for="endereço">Endereço:</label><br>
-            <input class="w3-input" type="text" id="endereco" name="endereco" placeholder="Endereço" required><br>
-
-
-            <label for="bairro">Bairro:</label><br>
-            <input class="w3-input" type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
-
-
-            <label for="email">Email:</label><br>
-            <input class="w3-input" type="text" id="email" name="email" placeholder="Email" required><br>
-
-        </div>
-        <button class="w3-button w3-block w3-section w3-ripple w3-pedding" type="submit">Salvar</button>
-    </form>
+    <div class="w3-container">
+        <h2 class="w3-margin-top"><strong>Cadastro de Clientes</strong></h2>
+        <form id="formaCliente" class='w3-container w3-card-2 w3-margin-top' action="pageClientesCadastro.php" method="post">
+            <div class="w3-margin-top">
+                <div class="w3-col s2">
+                    <label for="nome">Nome:</label><br>
+                    <input class="w3-input" type="text" id="nome" name="nome" placeholder="Nome" required><br>
+                </div>
+                <div class="w3-col s2">
+                    <label for="cpf">CPF:</label><br>
+                    <input class="w3-input" type="text" id="cpf" name="cpf" placeholder="CPF" required><br>
+                </div>
+                <div class="w3-col s2">
+                    <label for="telefone">Telefone:</label><br>
+                    <input class="w3-input" type="text" id="telefone" name="telefone" placeholder="Telefone" required><br>
+                </div>
+                <div class="w3-col s2">
+                    <label for="cep">Cep:</label><br>
+                    <input class="w3-input" type="text" id="cap" name="cep" placeholder="CEP" required><br>
+                </div>
+                
+                <div class="w3-col s2">
+                    <label for="estado">Estado:</label><br>
+                    <input class="w3-input" type="text" id="estado" name="estado" placeholder="Estado" required><br>
+                </div>
+                <div class="w3-col s2">
+                    <label for="cidade">Cidade:</label><br>
+                    <input class="w3-input" type="text" id="cidade" name="cidade" placeholder="Cidade" required><br>
+                </div>
+                <div class="w3-col s2">
+                    <label for="endereço">Endereço:</label><br>
+                    <input class="w3-input" type="text" id="endereco" name="endereco" placeholder="Endereço" required><br>
+                </div>
+                 <div class="w3-col s2">
+                     <label for="bairro">Bairro:</label><br>
+                     <input class="w3-input" type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
+                 </div>   
+                <div class="w3-col s2">
+                    <label for="email">Email:</label><br>
+                    <input class="w3-input" type="text" id="email" name="email" placeholder="Email" required><br>
+                </div>
+            </div>
+            <div class="w3-row-padding w3-margin-bottom">
+                <button class="w3-button w3-blue w3-margin-top" type="submit">Salvar</button>
+            </div>
+        </form>
+    </div>
+    <?php include("pagelistarCliente.php") ?>
 </body>
 
 </html>

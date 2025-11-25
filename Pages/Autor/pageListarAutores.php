@@ -39,6 +39,62 @@ $result = $conn->query($sql);
 <div class="w3-container w3-padding">
     <h1 class="w3-text-green"><i class="fa fa-users"></i> Lista de Autores</h1>
 
+<body>
+    <?php
+        include("../../Components/menu/menu.html");
+        include("../../dados/conexao/conexao.php"); 
+
+        // Consulta autores
+        $sql = "SELECT Nome, Email, DataNascimento, Biografia FROM autor";
+        $result = $conn->query($sql);
+
+        echo "<h1>📚 Lista de Autores</h1>";
+
+        if ($result && $result->num_rows > 0) {
+            echo "<table>";
+            echo "<tr><th>Nome</th><th>Email</th><th>Data de Nascimento</th><th>Biografia</th></tr>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($row["Nome"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["Email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["DataNascimento"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["Biografia"]) . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "<p>Nenhum autor cadastrado ainda.</p>";
+        }
+    include("../../dados/conexao/conexao.php");
+
+
+    if (isset($_POST["delete_id"])) {
+        $id = $_POST['delete_id'];
+        $sql = "DELETE FROM autor WHERE id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+    }
+
+
+    if (isset($_POST["edit_id"])) {
+        $id = $_POST["edit_id"];
+        $Nome = $_POST["Nome"];
+        $Email = $_POST["Email"];
+        $DataNascimento = $_POST["DataNascimento"];
+        $Biografia = $_POST["Biografia"];
+
+        $sql = "UPDATE autor SET Nome=?, Email=?, DataNascimento=?, Biografia=? WHERE id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssi", $Nome, $Email, $DataNascimento, $Biografia, $id);
+        $stmt->execute();
+    }
+
+    $sql = "SELECT id, Nome, Email, DataNascimento, Biografia FROM autor";
+    $result = $conn->query($sql);
+    ?>
+    <h1>📚 Lista de Autores</h1>
+
     <?php if ($result && $result->num_rows > 0): ?>
         <div class="w3-responsive w3-card w3-white w3-round-large w3-margin-top">
             <table class="w3-table-all w3-hoverable w3-striped w3-bordered">
