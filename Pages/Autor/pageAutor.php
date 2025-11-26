@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🖊 Cadastro de Autor</title
-
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Cadastro de Clientes</title>
 </head>
-<body class="w3-container">
-
-<?php
+<body>
+<?php   
 include("../../dados/conexao/conexao.php");
 include("../../Components/menu/menu.html");
 
@@ -38,9 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<h1 class="w3-text-green"> 📚 Cadastro de Autor</h1>
-
-<form id="autorForm" action="pageAutor.php" method="POST" class="w3-container w3-card-4 w3-light-grey" style="padding:20px;">
+<h1 class="w3-center"> 📚 Cadastro de Autor</h1>
+<form id="autorForm" action="pageAutor.php" method="POST" class="w3-container w3-card-4 w3-light-grey" style="padding:10px;">
 
     <label><b>Nome</b></label>
     <input class="w3-input w3-border" type="text" name="Nome" required>
