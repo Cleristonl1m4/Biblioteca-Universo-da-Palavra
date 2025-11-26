@@ -39,6 +39,8 @@ $result = $conn->query($sql);
 <div class="w3-container w3-padding">
     <h1 class="w3-text-green"><i class="fa fa-users"></i> Lista de Autores</h1>
 
+<body>
+   
     <?php if ($result && $result->num_rows > 0): ?>
         <div class="w3-responsive w3-card w3-white w3-round-large w3-margin-top">
             <table class="w3-table-all w3-hoverable w3-striped w3-bordered">
