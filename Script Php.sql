@@ -43,3 +43,16 @@ CREATE TABLE livros (
     editora VARCHAR(255),
     capa VARCHAR(255)          
 );
+
+
+CREATE TABLE editoras (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    pais VARCHAR(100),
+    cidade VARCHAR(100),
+    ano_fundacao INT,
+    site VARCHAR(255),
+    email VARCHAR(150),
+    telefone VARCHAR(20),
+    UNIQUE KEY (nome)
+);
