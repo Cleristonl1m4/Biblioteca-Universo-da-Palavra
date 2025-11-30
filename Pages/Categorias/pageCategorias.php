@@ -13,7 +13,6 @@
 include("../../dados/conexao/conexao.php");
 include("../../Components/menu/menu.html");
 
-// Buscar categoria para editar
 $categoriaEdit = null;
 if (isset($_GET['editar'])) {
     $id = intval($_GET['editar']);
@@ -26,11 +25,9 @@ if (isset($_GET['editar'])) {
     $stmtEdit->close();
 }
 
-// Excluir categoria
 if (isset($_GET['excluir'])) {
     $id = intval($_GET['excluir']);
     
-    // Verificar se a categoria está sendo usada em algum livro
     $sqlCheck = "SELECT COUNT(*) as total FROM livros WHERE categoria = (SELECT nome FROM categorias WHERE id = ?)";
     $stmtCheck = $conn->prepare($sqlCheck);
     $stmtCheck->bind_param("i", $id);
@@ -61,14 +58,12 @@ if (isset($_GET['excluir'])) {
     $stmtCheck->close();
 }
 
-// Cadastrar ou atualizar categoria
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $Nome = trim($_POST["Nome"] ?? "");
     $Descricao = trim($_POST["Descricao"] ?? "");
     $id = isset($_POST["id"]) ? intval($_POST["id"]) : null;
 
     if ($Nome) {
-        // Se tem ID, é EDIÇÃO
         if ($id) {
             $sql = "UPDATE categorias SET nome=?, descricao=? WHERE id=?";
             $update = $conn->prepare($sql);
@@ -88,9 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             }
             $update->close();
         } 
-        // Se NÃO tem ID, é CADASTRO
         else {
-            // Verificar se categoria já existe
             $sqlCheck = "SELECT id FROM categorias WHERE nome = ?";
             $stmtCheck = $conn->prepare($sqlCheck);
             $stmtCheck->bind_param("s", $Nome);
