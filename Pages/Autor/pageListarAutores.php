@@ -43,7 +43,7 @@ $result = $conn->query($sql);
     <?php if ($result && $result->num_rows > 0): ?>
         <div class="w3-responsive w3-card w3-white w3-round-large w3-margin-top">
             <table class="w3-table-all w3-hoverable w3-striped w3-bordered">
-                <tr class="w3-green">
+                <tr class="w3-brown">
                     <th>ID</th>
                     <th>Nome</th>
                     <th>Email</th>
@@ -64,14 +64,14 @@ $result = $conn->query($sql);
                         </td>
                         <td>
                             <button class="w3-button w3-blue w3-round-small" onclick="toggleEdit(<?php echo $row['id']; ?>)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-pencil"></i>Editar
                             </button>
-                            <form method="POST" style="display:inline;" onsubmit="return confirm('Quer mesmo excluir?')">
+                            <form method="POST" onsubmit="return confirm('Quer mesmo excluir?')">
                                 <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
                                 <button type="submit" class="w3-button w3-red w3-round-small">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-trash"></i> Excluir
                                 </button>
-                            </form>
+                        
                         </td>
                     </tr>
 
