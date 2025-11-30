@@ -13,17 +13,6 @@ CREATE TABLE autor (
     Biografia TEXT
 );
 
-CREATE TABLE livros (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    autor VARCHAR(255) NOT NULL,
-    capa VARCHAR(255) DEFAULT NULL, 
-    editora VARCHAR(255) DEFAULT NULL
-);
-
-ALTER TABLE livros MODIFY ano_publicacao INT;
-
-
 INSERT INTO livros (titulo, autor, capa, ano_publicacao, editora)
 VALUES 
 ('O Alquimista', 'Paulo Coelho', 'alquimista.jpg', 1988, 'Rocco'),
@@ -44,6 +33,8 @@ CREATE TABLE livros (
     capa VARCHAR(255)          
 );
 
+ALTER TABLE livros ADD COLUMN categoria VARCHAR(100) AFTER editora;
+
 
 CREATE TABLE editoras (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,4 +46,11 @@ CREATE TABLE editoras (
     email VARCHAR(150),
     telefone VARCHAR(20),
     UNIQUE KEY (nome)
+);
+
+
+CREATE TABLE categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    descricao TEXT
 );
