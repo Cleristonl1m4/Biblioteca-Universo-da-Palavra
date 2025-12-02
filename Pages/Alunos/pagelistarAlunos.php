@@ -11,7 +11,7 @@
     <?php
     include("../../dados/conexao/conexao.php");
 
-    $sql = "SELECT * FROM clientes";
+    $sql = "SELECT * FROM alunos";
 
     $result = $conn->query($sql);
 
@@ -48,7 +48,7 @@
                 echo "<td>" . htmlspecialchars($row["bairro"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                 echo "<td>";
-                echo "<a href='deleteCliente.php?id=".$row['id']."'><button type='button'>Exluir</button></a></td>";
+                echo "<a href='deleteAluno.php?id=" . $row['id'] . "'><button type='button'>Exluir</button></a></td>";
                 echo "</tr>";
             }
         }

@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     $id = $_GET['id'];
 
-    $sql = "DELETE FROM clientes WHERE id = ?";
+    $sql = "DELETE FROM alunos WHERE id = ?";
     $result = $conn->prepare($sql);
     $result->bind_param("i", $id);
 
@@ -29,4 +29,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             </div>';
 }
 
-header("location: /Biblioteca-Universo-da-Palavra/Pages/Clientes/pageClientesCadastro.php");
+header("location: /Biblioteca-Universo-da-Palavra/Pages/Alunos/pageAlunosCadastro.php");

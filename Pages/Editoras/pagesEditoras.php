@@ -1,3 +1,4 @@
+<?php include("../../Controllers/validar_sessao.php"); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -13,7 +14,7 @@
 
     <?php
     include("../../dados/conexao/conexao.php");
-    include("../../Components/menu/menu.html");
+    include("../../Components/menu/menu.php");
 
     $editoraEdit = null;
     if (isset($_GET['editar'])) {

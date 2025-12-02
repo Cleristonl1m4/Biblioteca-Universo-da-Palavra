@@ -13,7 +13,7 @@
 <body>
     <?php
     include("dados/conexao/conexao.php");
-    include("Components/menu/menu.html");
+    include("Components/menu/menu.php");
 
     $sqlLivros = "SELECT titulo, autor, capa FROM livros ORDER BY id DESC LIMIT 6";
     $resultLivros = $conn->query($sqlLivros);
