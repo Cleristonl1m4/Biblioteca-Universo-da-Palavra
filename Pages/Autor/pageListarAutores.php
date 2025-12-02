@@ -2,170 +2,202 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Autores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✍️ Lista de Autores</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="w3-light-grey">
+<body>
 
 <?php
 include("../../dados/conexao/conexao.php");
 
-if (isset($_POST["delete_id"])) {
-    $id = $_POST['delete_id'];
-    $sql = "DELETE FROM autor WHERE id=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+if (isset($_GET['excluir'])) {
+    $id = intval($_GET['excluir']);
+    
+    $sqlCheck = "SELECT COUNT(*) as total FROM livros WHERE autor = (SELECT Nome FROM autor WHERE id = ?)";
+    $stmtCheck = $conn->prepare($sqlCheck);
+    $stmtCheck->bind_param("i", $id);
+    $stmtCheck->execute();
+    $resultCheck = $stmtCheck->get_result();
+    $check = $resultCheck->fetch_assoc();
+    
+    if ($check['total'] > 0) {
+        echo '<div class="w3-panel w3-red w3-padding w3-round">
+                <i class="fa fa-exclamation-triangle"></i> 
+                Não é possível excluir! Este autor possui ' . $check['total'] . ' livro(s) cadastrado(s).
+              </div>';
+    } else {
+        $sqlDel = "DELETE FROM autor WHERE id = ?";
+        $stmt = $conn->prepare($sqlDel);
+        $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
+            echo '<div class="w3-panel w3-green w3-padding w3-round">
+                    <i class="fa fa-check"></i> Autor excluído com sucesso!
+                  </div>';
+        } else {
+            echo '<div class="w3-panel w3-red w3-padding w3-round">
+                    <i class="fa fa-times"></i> Erro ao excluir: ' . $conn->error . '
+                  </div>';
+        }
+        $stmt->close();
+    }
+    $stmtCheck->close();
 }
 
+
 if (isset($_POST["edit_id"])) {
-    $id = $_POST["edit_id"];
-    $Nome = $_POST["Nome"];
-    $Email = $_POST["Email"];
+    $id = intval($_POST["edit_id"]);
+    $Nome = trim($_POST["Nome"]);
+    $Email = trim($_POST["Email"]);
     $DataNascimento = $_POST["DataNascimento"];
-    $Biografia = $_POST["Biografia"];
+    $Biografia = trim($_POST["Biografia"]);
 
     $sql = "UPDATE autor SET Nome=?, Email=?, DataNascimento=?, Biografia=? WHERE id=?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssssi", $Nome, $Email, $DataNascimento, $Biografia, $id);
-    $stmt->execute();
+    
+    if ($stmt->execute()) {
+        echo '<div class="w3-panel w3-green w3-padding w3-round">
+                <i class="fa fa-check"></i> Autor atualizado com sucesso!
+              </div>';
+    } else {
+        echo '<div class="w3-panel w3-red w3-padding w3-round">
+                <i class="fa fa-times"></i> Erro ao atualizar: ' . $conn->error . '
+              </div>';
+    }
+    $stmt->close();
 }
 
-$sql = "SELECT id, Nome, Email, DataNascimento, Biografia FROM autor";
+$sql = "SELECT id, Nome, Email, DataNascimento, Biografia FROM autor ORDER BY Nome ASC";
 $result = $conn->query($sql);
 ?>
 
-<div class="w3-container w3-padding">
-    <h1 class="w3-text-green"><i class="fa fa-users"></i> Lista de Autores</h1>
+<div class="w3-container w3-margin-top">
+    <h1 class="w3-text-brown">
+        <i class="fa fa-users"></i> Lista de Autores
+    </h1>
+    <div class="w3-border-bottom w3-border-brown" style="width:100px; border-width:3px !important;"></div>
+</div>
 
-<body>
-    <?php
-        include("../../Components/menu/menu.html");
-        include("../../dados/conexao/conexao.php"); 
-
-        // Consulta autores
-        $sql = "SELECT Nome, Email, DataNascimento, Biografia FROM autor";
-        $result = $conn->query($sql);
-
-        echo "<h1>📚 Lista de Autores</h1>";
-
-        if ($result && $result->num_rows > 0) {
-            echo "<table>";
-            echo "<tr><th>Nome</th><th>Email</th><th>Data de Nascimento</th><th>Biografia</th></tr>";
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($row["Nome"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["Email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["DataNascimento"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["Biografia"]) . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "<p>Nenhum autor cadastrado ainda.</p>";
-        }
-    include("../../dados/conexao/conexao.php");
-
-
-    if (isset($_POST["delete_id"])) {
-        $id = $_POST['delete_id'];
-        $sql = "DELETE FROM autor WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-    }
-
-
-    if (isset($_POST["edit_id"])) {
-        $id = $_POST["edit_id"];
-        $Nome = $_POST["Nome"];
-        $Email = $_POST["Email"];
-        $DataNascimento = $_POST["DataNascimento"];
-        $Biografia = $_POST["Biografia"];
-
-        $sql = "UPDATE autor SET Nome=?, Email=?, DataNascimento=?, Biografia=? WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssi", $Nome, $Email, $DataNascimento, $Biografia, $id);
-        $stmt->execute();
-    }
-
-    $sql = "SELECT id, Nome, Email, DataNascimento, Biografia FROM autor";
-    $result = $conn->query($sql);
-    ?>
-    <h1>📚 Lista de Autores</h1>
-
-    <?php if ($result && $result->num_rows > 0): ?>
-        <div class="w3-responsive w3-card w3-white w3-round-large w3-margin-top">
-            <table class="w3-table-all w3-hoverable w3-striped w3-bordered">
-                <tr class="w3-green">
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Data de Nascimento</th>
-                    <th>Biografia</th>
-                    <th>Ações</th>
-                </tr>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr id="view-<?php echo $row['id']; ?>">
-                        <td><?php echo htmlspecialchars($row["id"]); ?></td>
-                        <td><?php echo htmlspecialchars($row["Nome"]); ?></td>
-                        <td><?php echo htmlspecialchars($row["Email"]); ?></td>
-                        <td><?php echo htmlspecialchars($row["DataNascimento"]); ?></td>
-                        <td>
-                            <div class="w3-card w3-light-grey w3-round w3-padding-small w3-small" style="max-height:100px; overflow-y:auto;">
-                                <?php echo nl2br(htmlspecialchars($row["Biografia"])); ?>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="w3-button w3-blue w3-round-small" onclick="toggleEdit(<?php echo $row['id']; ?>)">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                            <form method="POST" style="display:inline;" onsubmit="return confirm('Quer mesmo excluir?')">
-                                <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <button type="submit" class="w3-button w3-red w3-round-small">
-                                    <i class="fa fa-trash"></i>
+<?php if ($result && $result->num_rows > 0): ?>
+    <div class="w3-container w3-margin-top">
+        <div class="w3-responsive">
+            <table class="w3-table-all w3-hoverable w3-card-4">
+                <thead>
+                    <tr class="w3-brown">
+                        <th><i class="fa fa-hashtag"></i> ID</th>
+                        <th><i class="fa fa-user"></i> Nome</th>
+                        <th><i class="fa fa-envelope"></i> Email</th>
+                        <th><i class="fa fa-calendar"></i> Data de Nascimento</th>
+                        <th><i class="fa fa-file-text"></i> Biografia</th>
+                        <th><i class="fa fa-book"></i> Livros</th>
+                        <th><i class="fa fa-cog"></i> Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): 
+                        // Contar livros do autor
+                        $sqlLivros = "SELECT COUNT(*) as total FROM livros WHERE autor = ?";
+                        $stmtLivros = $conn->prepare($sqlLivros);
+                        $stmtLivros->bind_param("s", $row['Nome']);
+                        $stmtLivros->execute();
+                        $resultLivros = $stmtLivros->get_result();
+                        $totalLivros = $resultLivros->fetch_assoc()['total'];
+                        $stmtLivros->close();
+                    ?>
+                        <!-- Linha de Visualização -->
+                        <tr id="view-<?= $row['id'] ?>">
+                            <td><?= $row['id'] ?></td>
+                            <td><strong><?= htmlspecialchars($row['Nome']) ?></strong></td>
+                            <td><?= htmlspecialchars($row['Email']) ?></td>
+                            <td><?= date('d/m/Y', strtotime($row['DataNascimento'])) ?></td>
+                            <td>
+                                <div style="max-width:300px;">
+                                    <?= htmlspecialchars(substr($row['Biografia'], 0, 150)) ?>
+                                    <?= strlen($row['Biografia']) > 150 ? '...' : '' ?>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="w3-tag w3-round w3-green">
+                                    <?= $totalLivros ?> livro(s)
+                                </span>
+                            </td>
+                            <td>
+                                <button class="w3-button w3-blue w3-round w3-small" 
+                                        onclick="toggleEdit(<?= $row['id'] ?>)">
+                                    <i class="fa fa-pencil"></i> Editar
                                 </button>
+                                <a href="pageListaAutores.php?excluir=<?= $row['id'] ?>"
+                                   onclick="return confirm('Tem certeza que deseja excluir este autor?')"
+                                   class="w3-button w3-red w3-round w3-small">
+                                    <i class="fa fa-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr id="edit-<?= $row['id'] ?>" style="display:none;" class="w3-pale-blue">
+                            <form method="POST">
+                                <td>
+                                    <?= $row['id'] ?>
+                                    <input type="hidden" name="edit_id" value="<?= $row['id'] ?>">
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round" type="text" name="Nome" 
+                                           value="<?= htmlspecialchars($row['Nome']) ?>" required>
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round" type="email" name="Email" 
+                                           value="<?= htmlspecialchars($row['Email']) ?>" required>
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round" type="date" name="DataNascimento" 
+                                           value="<?= htmlspecialchars($row['DataNascimento']) ?>" required>
+                                </td>
+                                <td colspan="2">
+                                    <textarea class="w3-input w3-border w3-round" name="Biografia" 
+                                              rows="3"><?= htmlspecialchars($row['Biografia']) ?></textarea>
+                                </td>
+                                <td>
+                                    <button type="submit" class="w3-button w3-green w3-round w3-small">
+                                        <i class="fa fa-check"></i> Salvar
+                                    </button>
+                                    <button type="button" class="w3-button w3-grey w3-round w3-small" 
+                                            onclick="toggleEdit(<?= $row['id'] ?>)">
+                                        <i class="fa fa-times"></i> Cancelar
+                                    </button>
+                                </td>
                             </form>
-                        </td>
-                    </tr>
-
-                    <tr id="edit-<?php echo $row['id']; ?>" style="display:none;" class="w3-pale-blue">
-                        <form method="POST">
-                            <td>
-                                <?php echo $row['id']; ?>
-                                <input type="hidden" name="edit_id" value="<?php echo $row['id']; ?>">
-                            </td>
-                            <td><input class="w3-input w3-border w3-round" type="text" name="Nome" value="<?php echo htmlspecialchars($row["Nome"]); ?>"></td>
-                            <td><input class="w3-input w3-border w3-round" type="text" name="Email" value="<?php echo htmlspecialchars($row["Email"]); ?>"></td>
-                            <td><input class="w3-input w3-border w3-round" type="date" name="DataNascimento" value="<?php echo htmlspecialchars($row["DataNascimento"]); ?>"></td>
-                            <td><textarea class="w3-input w3-border w3-round" name="Biografia"><?php echo htmlspecialchars($row["Biografia"]); ?></textarea></td>
-                            <td>
-                                <button type="submit" class="w3-button w3-green w3-round-small">
-                                    <i class="fa fa-check"></i>
-                                </button>
-                                <button type="button" class="w3-button w3-grey w3-round-small" onclick="toggleEdit(<?php echo $row['id']; ?>)">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </form>
-                    </tr>
-                <?php endwhile; ?>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
             </table>
         </div>
-    <?php else: ?>
-        <p class="w3-text-grey">Nenhum autor cadastrado ainda.</p>
-    <?php endif; ?>
+    </div>
+<?php else: ?>
+    <div class="w3-container w3-margin-top">
+        <div class="w3-panel w3-pale-yellow w3-border w3-round-large w3-center">
+            <p><i class="fa fa-info-circle"></i> Nenhum autor cadastrado ainda.</p>
+        </div>
+    </div>
+<?php endif; ?>
 
-    <?php $conn->close(); ?>
-</div>
+
+
+<?php $conn->close(); ?>
 
 <script>
     function toggleEdit(id) {
         const viewRow = document.getElementById("view-" + id);
         const editRow = document.getElementById("edit-" + id);
-        viewRow.style.display = viewRow.style.display === "none" ? "" : "none";
-        editRow.style.display = editRow.style.display === "none" ? "" : "none";
+        
+        if (viewRow.style.display === "none") {
+            viewRow.style.display = "";
+            editRow.style.display = "none";
+        } else {
+            viewRow.style.display = "none";
+            editRow.style.display = "";
+        }
     }
 </script>
 

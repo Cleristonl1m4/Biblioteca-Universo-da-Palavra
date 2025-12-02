@@ -15,6 +15,18 @@
     include("../../dados/conexao/conexao.php");
     include("../../Components/menu/menu.html");
 
+    $editoraEdit = null;
+    if (isset($_GET['editar'])) {
+        $id = intval($_GET['editar']);
+        $sqlEdit = "SELECT * FROM editoras WHERE id = ?";
+        $stmtEdit = $conn->prepare($sqlEdit);
+        $stmtEdit->bind_param("i", $id);
+        $stmtEdit->execute();
+        $resultEdit = $stmtEdit->get_result();
+        $editoraEdit = $resultEdit->fetch_assoc();
+        $stmtEdit->close();
+    }
+
     if (isset($_GET['excluir'])) {
         $id = intval($_GET['excluir']);
 
@@ -48,7 +60,6 @@
         $stmtCheck->close();
     }
 
-    // Cadastrar editora
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $Nome = trim($_POST["Nome"] ?? "");
         $Pais = trim($_POST["Pais"] ?? "");
@@ -57,44 +68,72 @@
         $Site = trim($_POST["Site"] ?? "");
         $Email = trim($_POST["Email"] ?? "");
         $Telefone = trim($_POST["Telefone"] ?? "");
+        $id = isset($_POST["id"]) ? intval($_POST["id"]) : null;
 
         if ($Nome) {
-            // Verificar se editora já existe
-            $sqlCheck = "SELECT id FROM editoras WHERE nome = ?";
-            $stmtCheck = $conn->prepare($sqlCheck);
-            $stmtCheck->bind_param("s", $Nome);
-            $stmtCheck->execute();
-            $resultCheck = $stmtCheck->get_result();
 
-            if ($resultCheck->num_rows > 0) {
-                echo '<div class="w3-panel w3-amber w3-padding w3-round">
-                    <i class="fa fa-exclamation"></i> Esta editora já está cadastrada!
-                  </div>';
-            } else {
+            if ($id) {
                 if ($AnoFundacao !== null) {
-                    $sql = "INSERT INTO editoras (nome, pais, cidade, ano_fundacao, site, email, telefone) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?)";
-                    $insert = $conn->prepare($sql);
-                    $insert->bind_param("sssisss", $Nome, $Pais, $Cidade, $AnoFundacao, $Site, $Email, $Telefone);
+                    $sql = "UPDATE editoras SET nome=?, pais=?, cidade=?, ano_fundacao=?, site=?, email=?, telefone=? WHERE id=?";
+                    $update = $conn->prepare($sql);
+                    $update->bind_param("sssisssi", $Nome, $Pais, $Cidade, $AnoFundacao, $Site, $Email, $Telefone, $id);
                 } else {
-                    $sql = "INSERT INTO editoras (nome, pais, cidade, site, email, telefone) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
-                    $insert = $conn->prepare($sql);
-                    $insert->bind_param("ssssss", $Nome, $Pais, $Cidade, $Site, $Email, $Telefone);
+                    $sql = "UPDATE editoras SET nome=?, pais=?, cidade=?, site=?, email=?, telefone=? WHERE id=?";
+                    $update = $conn->prepare($sql);
+                    $update->bind_param("ssssssi", $Nome, $Pais, $Cidade, $Site, $Email, $Telefone, $id);
                 }
 
-                if ($insert->execute()) {
+                if ($update->execute()) {
                     echo '<div class="w3-panel w3-green w3-padding w3-round">
-                        <i class="fa fa-check"></i> Editora cadastrada com sucesso!
-                      </div>';
+                            <i class="fa fa-check"></i> Editora atualizada com sucesso!
+                          </div>';
+                    $editoraEdit = null; // Limpar formulário
+                    header("Location: pagesEditoras.php"); // Recarregar página
+                    exit;
                 } else {
                     echo '<div class="w3-panel w3-red w3-padding w3-round">
-                        <i class="fa fa-times"></i> Erro ao cadastrar: ' . $conn->error . '
-                      </div>';
+                            <i class="fa fa-times"></i> Erro ao atualizar: ' . $conn->error . '
+                          </div>';
                 }
-                $insert->close();
+                $update->close();
+            } 
+            else {
+                $sqlCheck = "SELECT id FROM editoras WHERE nome = ?";
+                $stmtCheck = $conn->prepare($sqlCheck);
+                $stmtCheck->bind_param("s", $Nome);
+                $stmtCheck->execute();
+                $resultCheck = $stmtCheck->get_result();
+
+                if ($resultCheck->num_rows > 0) {
+                    echo '<div class="w3-panel w3-amber w3-padding w3-round">
+                        <i class="fa fa-exclamation"></i> Esta editora já está cadastrada!
+                      </div>';
+                } else {
+                    if ($AnoFundacao !== null) {
+                        $sql = "INSERT INTO editoras (nome, pais, cidade, ano_fundacao, site, email, telefone) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        $insert = $conn->prepare($sql);
+                        $insert->bind_param("sssisss", $Nome, $Pais, $Cidade, $AnoFundacao, $Site, $Email, $Telefone);
+                    } else {
+                        $sql = "INSERT INTO editoras (nome, pais, cidade, site, email, telefone) 
+                            VALUES (?, ?, ?, ?, ?, ?)";
+                        $insert = $conn->prepare($sql);
+                        $insert->bind_param("ssssss", $Nome, $Pais, $Cidade, $Site, $Email, $Telefone);
+                    }
+
+                    if ($insert->execute()) {
+                        echo '<div class="w3-panel w3-green w3-padding w3-round">
+                            <i class="fa fa-check"></i> Editora cadastrada com sucesso!
+                          </div>';
+                    } else {
+                        echo '<div class="w3-panel w3-red w3-padding w3-round">
+                            <i class="fa fa-times"></i> Erro ao cadastrar: ' . $conn->error . '
+                          </div>';
+                    }
+                    $insert->close();
+                }
+                $stmtCheck->close();
             }
-            $stmtCheck->close();
         } else {
             echo '<div class="w3-panel w3-red w3-padding w3-round">
                 <i class="fa fa-exclamation-triangle"></i> O nome da editora é obrigatório.
@@ -105,7 +144,7 @@
 
     <div class="w3-container w3-margin-top">
         <h1 class="w3-text-brown">
-            <i class="fa fa-building"></i> Cadastro de Editoras
+            <i class="fa fa-building"></i> <?= $editoraEdit ? 'Editar Editora' : 'Cadastro de Editoras' ?>
         </h1>
         <div class="w3-border-bottom w3-border-brown" style="width:100px; border-width:3px !important;"></div>
     </div>
@@ -114,57 +153,78 @@
         <form id="editoraForm" action="pagesEditoras.php" method="POST"
             class="w3-card-4 w3-white w3-round-large w3-padding">
 
+            <?php if ($editoraEdit): ?>
+                <input type="hidden" name="id" value="<?= $editoraEdit['id'] ?>">
+            <?php endif; ?>
+
             <div class="w3-row-padding">
                 <div class="w3-half">
                     <label><b><i class="fa fa-tag"></i> Nome da Editora *</b></label>
-                    <input class="w3-input w3-border w3-round" type="text" name="Nome" required>
+                    <input class="w3-input w3-border w3-round" type="text" name="Nome" 
+                           value="<?= htmlspecialchars($editoraEdit['nome'] ?? '') ?>" required>
                 </div>
 
                 <div class="w3-half">
                     <label><b><i class="fa fa-globe"></i> País</b></label>
-                    <input class="w3-input w3-border w3-round" type="text" name="Pais" placeholder="Ex: Brasil">
+                    <input class="w3-input w3-border w3-round" type="text" name="Pais" 
+                           value="<?= htmlspecialchars($editoraEdit['pais'] ?? '') ?>" 
+                           placeholder="Ex: Brasil">
                 </div>
             </div>
 
             <div class="w3-row-padding w3-margin-top">
                 <div class="w3-half">
                     <label><b><i class="fa fa-map-marker"></i> Cidade</b></label>
-                    <input class="w3-input w3-border w3-round" type="text" name="Cidade" placeholder="Ex: São Paulo">
+                    <input class="w3-input w3-border w3-round" type="text" name="Cidade" 
+                           value="<?= htmlspecialchars($editoraEdit['cidade'] ?? '') ?>" 
+                           placeholder="Ex: São Paulo">
                 </div>
 
                 <div class="w3-half">
                     <label><b><i class="fa fa-calendar"></i> Ano de Fundação</b></label>
-                    <input class="w3-input w3-border w3-round" type="number" name="AnoFundacao" min="1800" max="2025"
-                        placeholder="Ex: 1990">
+                    <input class="w3-input w3-border w3-round" type="number" name="AnoFundacao" 
+                           value="<?= $editoraEdit['ano_fundacao'] ?? '' ?>" 
+                           min="1800" max="2025" placeholder="Ex: 1990">
                 </div>
             </div>
 
             <div class="w3-row-padding w3-margin-top">
                 <div class="w3-third">
                     <label><b><i class="fa fa-link"></i> Website</b></label>
-                    <input class="w3-input w3-border w3-round" type="url" name="Site" placeholder="https://exemplo.com">
+                    <input class="w3-input w3-border w3-round" type="url" name="Site" 
+                           value="<?= htmlspecialchars($editoraEdit['site'] ?? '') ?>" 
+                           placeholder="https://exemplo.com">
                 </div>
 
                 <div class="w3-third">
                     <label><b><i class="fa fa-envelope"></i> E-mail</b></label>
-                    <input class="w3-input w3-border w3-round" type="email" name="Email"
-                        placeholder="contato@editora.com">
+                    <input class="w3-input w3-border w3-round" type="email" name="Email" 
+                           value="<?= htmlspecialchars($editoraEdit['email'] ?? '') ?>" 
+                           placeholder="contato@editora.com">
                 </div>
 
                 <div class="w3-third">
                     <label><b><i class="fa fa-phone"></i> Telefone</b></label>
-                    <input class="w3-input w3-border w3-round" type="tel" name="Telefone" placeholder="(11) 1234-5678">
+                    <input class="w3-input w3-border w3-round" type="tel" name="Telefone" 
+                           value="<?= htmlspecialchars($editoraEdit['telefone'] ?? '') ?>" 
+                           placeholder="(11) 1234-5678">
                 </div>
             </div>
 
             <div class="w3-margin-top w3-padding-16">
                 <button type="submit" class="w3-button w3-green w3-round w3-large">
-                    <i class="fa fa-save"></i> Salvar
+                    <i class="fa fa-save"></i> <?= $editoraEdit ? 'Atualizar' : 'Salvar' ?>
                 </button>
-                <button type="button" class="w3-button w3-red w3-round w3-large"
-                    onclick="document.getElementById('editoraForm').reset()">
-                    <i class="fa fa-times"></i> Cancelar
-                </button>
+                <?php if ($editoraEdit): ?>
+                    <a href="pagesEditoras.php" class="w3-button w3-grey w3-round w3-large">
+                        <i class="fa fa-times"></i> Cancelar Edição
+                    </a>
+                <?php else: ?>
+                    <button type="button" class="w3-button w3-red w3-round w3-large"
+                            onclick="document.getElementById('editoraForm').reset()">
+                        <i class="fa fa-times"></i> Cancelar
+                    </button>
+                <?php endif; ?>
             </div>
         </form>
     </div>
@@ -242,6 +302,10 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
+                                    <a href="pagesEditoras.php?editar=<?= $editora['id'] ?>"
+                                       class="w3-button w3-blue w3-round w3-small">
+                                        <i class="fa fa-pencil"></i> Editar
+                                    </a>
                                     <a href="pagesEditoras.php?excluir=<?= $editora['id'] ?>"
                                         onclick="return confirm('Tem certeza que deseja excluir esta editora?')"
                                         class="w3-button w3-red w3-round w3-small">
@@ -267,4 +331,3 @@
 </body>
 
 </html>
-```
