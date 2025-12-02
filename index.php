@@ -1,3 +1,4 @@
+<?php include("Controllers/validar_sessao.php"); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -10,7 +11,6 @@
 </head>
 
 <body>
-
     <?php
     include("dados/conexao/conexao.php");
     include("Components/menu/menu.html");
@@ -22,10 +22,10 @@
     $resultAutores = $conn->query($sqlAutores);
     ?>
 
-    <header class="w3-container w3-brown w3-padding-64 w3-center">
+    <div class="w3-container w3-center">
         <h1 class="w3-jumbo w3-animate-top">📖 Universo da Palavra</h1>
         <p class="w3-xlarge">Explore mundos infinitos através da leitura</p>
-    </header>
+    </div>
 
     <div class="w3-container w3-padding-32">
         <div class="w3-card-4 w3-white w3-round-large w3-padding" style="max-width:800px; margin:0 auto;">
@@ -127,33 +127,33 @@
 
         <div class="w3-row-padding">
             <div class="w3-third">
-                <div class="w3-card-4 w3-green w3-round-large w3-padding-32 w3-animate-zoom">
+                <div class="w3-card-4 w3-green w3-round-large w3-padding-16 w3-animate-zoom">
                     <i class="fa fa-book fa-3x"></i>
                     <h3 class="w3-jumbo"><?= $stats['total_livros'] ?></h3>
                     <p class="w3-large">Livros</p>
                 </div>
             </div>
             <div class="w3-third">
-                <div class="w3-card-4 w3-brown w3-round-large w3-padding-32 w3-animate-zoom">
+                <div class="w3-card-4 w3-brown w3-round-large w3-padding-16 w3-animate-zoom">
                     <i class="fa fa-users fa-3x"></i>
                     <h3 class="w3-jumbo"><?= $stats['total_autores'] ?></h3>
                     <p class="w3-large">Autores</p>
                 </div>
             </div>
             <div class="w3-third">
-                <div class="w3-card-4 w3-amber w3-round-large w3-padding-32 w3-animate-zoom">
+                <div class="w3-card-4 w3-amber w3-round-large w3-padding-16 w3-animate-zoom">
                     <i class="fa fa-building fa-3x"></i>
                     <h3 class="w3-jumbo"><?= $stats['total_editoras'] ?></h3>
                     <p class="w3-large">Editoras</p>
                 </div>
             </div>
 
-            
+
         </div>
     </div>
     <footer class="w3-container w3-brown w3-padding-32 w3-center">
         <p class="w3-large"><i class="fa fa-heart"></i> © 2025 Biblioteca Universo da Palavra</p>
-        
+
     </footer>
 
     <?php

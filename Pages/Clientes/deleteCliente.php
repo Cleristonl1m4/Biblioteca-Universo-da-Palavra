@@ -29,4 +29,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             </div>';
 }
 
-header("location: /Universo-da-Palavra/Pages/Clientes/pageClientesCadastro.php");
+header("location: /Biblioteca-Universo-da-Palavra/Pages/Clientes/pageClientesCadastro.php");
