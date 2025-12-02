@@ -4,12 +4,12 @@ include("../dados/conexao/conexao.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $user = $_POST['username'] ?? '';
-    $pass = $_POST['password'] ?? '';
+    $user = $_POST['nome'] ?? '';
+    $pass = $_POST['senha'] ?? '';
 
-    $sql = "SELECT * FROM usuarios WHERE username = ? LIMIT 1";
+    $sql = "SELECT * FROM usuarios WHERE usuario = ? LIMIT 1";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
+    $stmt->bind_param("s", $user);
     $stmt->execute();
 
     $result = $stmt->get_result();
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $result->fetch_assoc();
 
 
-        if ($pass === $user['senha']) {
+        if (password_verify($pass,$user['senha'])) {
 
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $user;

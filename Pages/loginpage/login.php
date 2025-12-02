@@ -23,15 +23,15 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             <form class="w3-container" method="post" action="/Biblioteca-Universo-da-Palavra/Controllers/checkLogin.php">
                 <p>
                     <label>Usuário</label>
-                    <input class="w3-input" name="username" required>
+                    <input class="w3-input" name="nome" required>
                 </p>
                 <p>
                     <label>Senha</label>
-                    <input class="w3-input" type="password" name="password" required>
+                    <input class="w3-input" type="password" name="senha" required>
                 </p>
                 <p>
                     <button class="w3-btn w3-white w3-border w3-border-green w3-round-xlarge" type="submit">Enter</button>
-                    <a class="w3-btn w3-right w3-white w3-border w3-border-green w3-round-xlarge" href="/Pages/Usuarios/">Cadastrar</a>
+                    <a class="w3-btn w3-right w3-white w3-border w3-border-green w3-round-xlarge" href="/Biblioteca-Universo-da-Palavra/Pages/Usuarios/usercadastro.php">Cadastrar</a>
                 </p>
 
             </form>
