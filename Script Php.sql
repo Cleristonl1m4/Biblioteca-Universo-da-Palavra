@@ -55,3 +55,16 @@ CREATE TABLE usuarios (
     usuario VARCHAR(50) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    cep VARCHAR(10) NOT NULL,
+    estado VARCHAR(25) NOT NULL,
+    cidade VARCHAR(50) NOT NULL,
+    endereco VARCHAR(200) NOT NULL,
+    bairro VARCHAR(200) NOT NULL,
+    email VARCHAR(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
