@@ -7,6 +7,7 @@
     <a class="w3-bar-item w3-button" href="/Biblioteca-Universo-da-Palavra/Pages/livros/pagelivros.php">Livros</a>
     <a class="w3-bar-item w3-button" href="/Biblioteca-Universo-da-Palavra/Pages/Editoras/pagesEditoras.php">Editoras</a>
     <a class="w3-bar-item w3-button" href="/Biblioteca-Universo-da-Palavra/Pages/Categorias/pageCategorias.php">Categorias</a>
-    <a class="w3-bar-item w3-button w3-right" href="../../Controllers/logout/logout.php">Sair</a>
+    <a class="w3-bar-item w3-button w3-right" href="http://localhost/Biblioteca-Universo-da-Palavra/Controllers/logout/logout.php
+">Sair</a>
     <a class="w3-bar-item w3-right"><strong><?php echo $_SESSION['username']; ?></strong>!</a>
 </div>
