@@ -128,7 +128,7 @@ $result = $conn->query($sql);
                                         onclick="toggleEdit(<?= $row['id'] ?>)">
                                     <i class="fa fa-pencil"></i> Editar
                                 </button>
-                                <a href="pageListaAutores.php?excluir=<?= $row['id'] ?>"
+                                <a href="pageAutor.php?excluir=<?= $row['id'] ?>"
                                    onclick="return confirm('Tem certeza que deseja excluir este autor?')"
                                    class="w3-button w3-red w3-round w3-small">
                                     <i class="fa fa-trash"></i> Excluir
