@@ -68,3 +68,23 @@ CREATE TABLE clientes (
     bairro VARCHAR(200) NOT NULL,
     email VARCHAR(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+CREATE TABLE categorias (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    descricao TEXT
+);
+
+INSERT INTO categorias (nome, descricao) VALUES
+('Romance', 'Livros focados em relacionamentos e histórias de amor'),
+('Ficção Científica', 'Histórias baseadas em ciência e tecnologia futurista'),
+('Suspense', 'Narrativas que mantêm o leitor em tensão'),
+('Terror', 'Histórias de medo e horror'),
+('Fantasia', 'Mundos imaginários com magia e criaturas místicas'),
+('Biografia', 'Histórias reais sobre a vida de pessoas'),
+('Autoajuda', 'Livros de desenvolvimento pessoal'),
+('História', 'Narrativas sobre eventos históricos'),
+('Poesia', 'Obras literárias em verso'),
+('Infantil', 'Livros para crianças');
