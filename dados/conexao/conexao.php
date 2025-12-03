@@ -2,7 +2,7 @@
     $database = "universodaspalavras";
     $serve = "localhost";
     $user = "root";
-    $pass = "2208";
+    $pass = "Aluno123qwer#";
 
     $mensagen = "";
     $conn = new mysqli($serve,$user,$pass,$database );

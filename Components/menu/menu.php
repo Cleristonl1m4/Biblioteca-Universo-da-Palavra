@@ -13,4 +13,4 @@
     <a class="w3-bar-item w3-button w3-right" href="http://localhost/Biblioteca-Universo-da-Palavra/Controllers/logout/logout.php
 ">Sair</a>
     <a class="w3-bar-item w3-right"><strong><?php echo $_SESSION['username']; ?></strong>!</a>
-</div>g
+</div>
